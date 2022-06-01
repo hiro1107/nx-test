@@ -9,6 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     name: Coverage report
     steps:
+      - name: Setup Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
       - uses: actions/checkout@v1
       - name: Test coverage
         uses: ArtiomTr/jest-coverage-report-action@v2
