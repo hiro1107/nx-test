@@ -6,7 +6,7 @@
     "nx": "nx",
     "start": "nx serve",
     "test": "nx affected:test",
-    "test:coverage": "nx test my-new-app",
+    "test:coverage": "nx affected --target=test --base=main --head=HEAD",
     "lint": "nx workspace-lint && nx affected:lint",
     "lint:fix": "nx workspace-lint --fix && nx affected:lint --fix",
     "stylelint": "nx affected --target=stylelint",
