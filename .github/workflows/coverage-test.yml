@@ -15,7 +15,7 @@ jobs:
           node-version: 16
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
+        run: npm install
       - uses: actions/checkout@v1
       - name: Test coverage
         uses: ArtiomTr/jest-coverage-report-action@v2
