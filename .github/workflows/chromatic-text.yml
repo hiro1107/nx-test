@@ -62,5 +62,5 @@ jobs:
         with:
           fetch-depth: 0
       - name: Check result
-        if: ${{ needs.before_chromatic.outputs.should_run == 'true' }}
+        # if: ${{ needs.before_chromatic.outputs.should_run == 'true' }}
         run: echo "check run result is ${{needs.before_chromatic.outputs.should_run}}. 🍏 This job's status is ${{ job.status }}."
