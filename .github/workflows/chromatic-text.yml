@@ -41,7 +41,7 @@ jobs:
       - name: output the result
         id: should-run-check
         run: |
-          ${{ steps.wip-check.outputs.match == '' }} &&
+          echo ${{ steps.wip-check.outputs.match == '' }} &&
           ${{ steps.changed-files-regexp.outputs.match != '' }}
   chromatic:
     needs: before_chromatic
