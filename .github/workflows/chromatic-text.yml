@@ -53,7 +53,7 @@ jobs:
     needs: before_chromatic
     if: |
       github.event.pull_request.draft != true &&
-      ${{ needs.before_chromatic.outputs.should_run == 'run' }}
+      needs.before_chromatic.outputs.should_run == 'run'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
