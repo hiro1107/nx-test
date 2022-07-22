@@ -16,7 +16,7 @@ jobs:
       github.event.pull_request.draft != true
     runs-on: ubuntu-latest
     outputs:
-      should_run: ${{ steps.should-run-check.outputs.stdout }}
+      should_run: ${{ steps.should-run-check.outputs.should-run }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -43,9 +43,9 @@ jobs:
         run: |
           if [ ${{ steps.wip-check.outputs.match == '' }} = true ] &&
           [ ${{ steps.changed-files-regexp.outputs.match != '' }} = true ] ; then
-            echo 'true'
+            echo '::set-output name=should-run::run'
           else
-            echo 'false'
+            echo '::set-output name=should-run::skip'
           fi
 
   chromatic:
