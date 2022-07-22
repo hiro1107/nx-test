@@ -41,8 +41,13 @@ jobs:
       - name: output the result
         id: should-run-check
         run: |
-          echo ${{ steps.wip-check.outputs.match == '' }} &&
-          ${{ steps.changed-files-regexp.outputs.match != '' }}
+          if [ ${{ steps.wip-check.outputs.match == '' }} = true ] &&
+          [ ${{ steps.changed-files-regexp.outputs.match != '' }} = true ] ; then
+            echo 'true'
+          else
+            echo 'false'
+          fi
+
   chromatic:
     needs: before_chromatic
     if: |
@@ -57,5 +62,5 @@ jobs:
         with:
           fetch-depth: 0
       - name: Check result
-        # if: ${{ needs.before_chromatic.outputs.should_run == true }}
+        if: ${{ needs.before_chromatic.outputs.should_run == 'true' }}
         run: echo "check run result is ${{needs.before_chromatic.outputs.should_run}}. 🍏 This job's status is ${{ job.status }}."
