@@ -11,18 +11,15 @@ env:
   TZ: 'Asia/Tokyo'
 
 jobs:
-  chromatic:
+  before_chromatic:
     if: |
       github.event.pull_request.draft != true
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    strategy:
-      matrix:
-        node: ['16']
+    outputs:
+      should_run: |
+        ${{ steps.wip-check.outputs.match == '' }} &&
+        ${{ steps.changed-files-regexp.outputs.match != '' }}
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
       - uses: actions-ecosystem/action-regex-match@v2
         id: wip-check
         with:
@@ -40,15 +37,19 @@ jobs:
         with:
           text: ${{ steps.changed-files.outputs.all_changed_files }}
           regex: '\.snap|\.stories.(ts|tsx|js|jsx|mdx)'
-      - name: Show file name check result
-        id: show-files-check-result
-        run: echo "Files check result is ${{ steps.changed-files-regexp.outputs.match }}."
-      - name: Force exit on result of before run check
-        id: check-exit-before-run
-        if: |
-          ${{ steps.wip-check.outputs.match != '' }} ||
-          ${{ steps.changed-files-regexp.outputs.match == '' }}
-        run: exit 1
+  chromatic:
+    needs: before_chromatic
+    if: |
+      github.event.pull_request.draft != true
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        node: ['16']
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Build Storybook
-        if: ${{ success() }}
+        if: ${{ needs.before_chromatic.outputs.should_run == true }}
         run: echo "🍏 This job's status is ${{ job.status }}."
