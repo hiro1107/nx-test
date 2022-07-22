@@ -16,9 +16,7 @@ jobs:
       github.event.pull_request.draft != true
     runs-on: ubuntu-latest
     outputs:
-      should_run: |
-        ${{ steps.wip-check.outputs.match == '' }} &&
-        ${{ steps.changed-files-regexp.outputs.match != '' }}
+      should_run: ${{ steps.should-run-check.outputs }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -40,6 +38,11 @@ jobs:
         with:
           text: ${{ steps.changed-files.outputs.all_changed_files }}
           regex: '\.snap|\.stories.(ts|tsx|js|jsx|mdx)'
+      - name: output the result
+        id: should-run-check
+        run: |
+          ${{ steps.wip-check.outputs.match == '' }} &&
+          ${{ steps.changed-files-regexp.outputs.match != '' }}
   chromatic:
     needs: before_chromatic
     if: |
