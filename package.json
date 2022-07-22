@@ -6,7 +6,7 @@
     "nx": "nx",
     "start": "nx serve",
     "test": "nx affected:test",
-    "test:coverage": "npm run test -- --coverage --silent --testLocationInResults",
+    "test:coverage": "nx run-many --target=test --all --parallel=5 --ci --json --coverage --testLocationInResults --outputFile=report.json",
     "lint": "nx workspace-lint && nx affected:lint",
     "lint:fix": "nx workspace-lint --fix && nx affected:lint --fix",
     "stylelint": "nx affected --target=stylelint",

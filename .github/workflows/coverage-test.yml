@@ -9,13 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Coverage report
     steps:
-      - name: Setup Node.js 16
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16
       - uses: actions/checkout@v1
       - name: Test coverage
         uses: ArtiomTr/jest-coverage-report-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           test-script: npm run test:coverage
+          coverage-file: report.json
+          base-coverage-file: report.json
