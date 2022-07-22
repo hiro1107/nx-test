@@ -51,7 +51,8 @@ jobs:
   chromatic:
     needs: before_chromatic
     if: |
-      github.event.pull_request.draft != true
+      github.event.pull_request.draft != true &&
+      ${{ needs.before_chromatic.outputs.should_run == 'run' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
@@ -62,5 +63,5 @@ jobs:
         with:
           fetch-depth: 0
       - name: Check result
-        # if: ${{ needs.before_chromatic.outputs.should_run == 'true' }}
+        if: ${{ needs.before_chromatic.outputs.should_run == 'run' }}
         run: echo "check run result is ${{needs.before_chromatic.outputs.should_run}}. 🍏 This job's status is ${{ job.status }}."
