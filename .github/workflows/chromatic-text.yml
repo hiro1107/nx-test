@@ -43,33 +43,6 @@ jobs:
           ${{ steps.wip-check.outputs.match != '' }} ||
           ${{ steps.changed-files-regexp.outputs.match == '' }}
         run: exit 1
-      - uses: actions/cache@v3
-        if: ${{ success() }}
-        id: cache
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ matrix.node }}-npm-${{ hashFiles('**/package-lock.json') }}
-      - uses: actions/cache@v3
-        if: ${{ success() }} && steps.cache.outputs.cache-hit != 'true'
-        with:
-          path: |
-            ~/.npm
-            ~/.cache/Cypress
-          key: ${{ runner.os }}-node-${{ matrix.node }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-${{ matrix.node }}-npm-
-      - uses: nrwl/nx-set-shas@v2
-        if: ${{ success() }}
-        with:
-          main-branch-name: ${{ github.base_ref }}
-      - name: Setup Node.js ${{ matrix.node }}
-        if: ${{ success() }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node }}
-      - name: Install dependencies
-        if: ${{ success() }} && steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
       - name: Build Storybook
         if: ${{ success() }}
         run: echo "🍏 This job's status is ${{ job.status }}."
