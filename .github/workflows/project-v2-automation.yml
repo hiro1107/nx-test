@@ -1,0 +1,25 @@
+name: Project V2 Automation
+on:
+  issues:
+    types:
+      - opened
+  pull_request:
+    types:
+      - opened
+
+env:
+  TZ: 'Asia/Tokyo'
+
+jobs:
+  add_issue_with_open:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues'
+    timeout-minutes: 10
+    steps:
+      - run: echo "🍏 The github event_name is ${{ github.event_name }}."
+  add_pull_with_in_progress:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor != 'dependabot[bot]' && github.event_name == 'pull_request' }}
+    timeout-minutes: 10
+    steps:
+      - run: echo "🍏 The github event_name is ${{ github.event_name }}."
